@@ -7,6 +7,9 @@ import requests
 import os
 import uuid
 
+aws_access_key_id="AKIAY6JUIRL5VH35BTIW"
+aws_secret_access_key="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"
+
 # Getting dynamic instance parametters
 with open('InstanceParameter.json', 'r') as jsonfile:
     # Reading from json file
@@ -41,6 +44,7 @@ def activity_handler():
     user_name = request.form['username']
     caption_text = request.form['caption']
     message = "You post is in unknown STATE "
+    print("bucket operation doone")
 
     if s3_status.get("status") == 200:
 
@@ -79,7 +83,8 @@ def store_image_to_s3(activity_uuid, image_path):
         "status" : 400
     }
     try:
-        s3 = boto3.client('s3')
+        s3 = boto3.client('s3',region_name="us-east-1",aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key)
 
         bucket_name = "articles-image"
         file_name_at_bucket = "uploaded_image/" + str(activity_uuid) + ".jpg"
@@ -200,7 +205,8 @@ def negative_post_notification(uuid, user_name, uniques_entity_extracted):
 
     email_body = f"There is negative post found on SocialMe! \nActivity UUID : {uuid}\nPosted By : {user_name}\nKeywords Found in Activity : \n{email_entity_data}"
 
-    sns = boto3.client('sns')
+    sns = boto3.client('sns', region_name="us-east-1", aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key)
     response = sns.publish(
         TopicArn=SNSARN,
         Message=email_body,
@@ -239,7 +245,8 @@ def upload():
             return 'No selected file'
         file_path = os.path.join('.', file.filename)
         file.save(file_path)
-        s3 = boto3.client('s3')
+        s3 = boto3.client('s3', region_name="us-east-1", aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key)
         bucket_name = "articles-image"
         file_name_at_bucket = "uploaded_image/" + str("test") + ".jpg"
         s3.upload_file(file_path, bucket_name, file_name_at_bucket)
@@ -252,4 +259,4 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-app.run(host="0.0.0.0" , port = 5002)
+app.run(host="0.0.0.0" , port = 5003)

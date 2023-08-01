@@ -3,23 +3,29 @@ import pymysql
 import json
 # Code to get API Gateway
 
-client = boto3.client('secretsmanager', region_name="us-east-1", aws_access_key_id="AKIAY6JUIRL5VH35BTIW",
-    aws_secret_access_key="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")
+aws_access_key_id="AKIAY6JUIRL5VH35BTIW"
+aws_secret_access_key="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"
+
+
+client = boto3.client('secretsmanager', region_name="us-east-1", aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key)
 APIGatewayURL = client.get_secret_value(SecretId="APIGatewayURL")["SecretString"]
 
 # Code to get RDS info of new instance
-client = boto3.client('rds', region_name="us-east-1")
+client = boto3.client('rds', region_name="us-east-1", aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key)
 response = client.describe_db_instances()
 for db_instance in response['DBInstances']:
     db_instance_name = db_instance['DBInstanceIdentifier']
 
-    if db_instance_name == "mydb":
+    if db_instance_name == "userdatadb":
         HOSTNAME = db_instance["Endpoint"]["Address"]
         PORT = db_instance["Endpoint"]["Port"]
         USER = "admin"
         PASSWORD = "password"
 
-client = boto3.client('sns', region_name='us-east-1')
+client = boto3.client('sns', region_name='us-east-1', aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key)
 response = client.list_topics()
 
 for each_reg in response['Topics']:
