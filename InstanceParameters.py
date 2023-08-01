@@ -1,6 +1,7 @@
 import boto3
 import pymysql
 import json
+import time
 # Code to get API Gateway
 
 aws_access_key_id="AKIAY6JUIRL5VH35BTIW"
@@ -19,10 +20,14 @@ for db_instance in response['DBInstances']:
     db_instance_name = db_instance['DBInstanceIdentifier']
 
     if db_instance_name == "userdatadb":
-        HOSTNAME = db_instance["Endpoint"]["Address"]
-        PORT = db_instance["Endpoint"]["Port"]
-        USER = "admin"
-        PASSWORD = "password"
+
+        while "DBInstanceIdentifier" not in list(response["DBInstances"][0].keys()) :
+
+            time.sleep(2*60)
+            HOSTNAME = db_instance["Endpoint"]["Address"]
+            PORT = db_instance["Endpoint"]["Port"]
+            USER = "admin"
+            PASSWORD = "password"
 
 client = boto3.client('sns', region_name='us-east-1', aws_access_key_id=aws_access_key_id,
     aws_secret_access_key=aws_secret_access_key)
