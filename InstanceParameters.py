@@ -15,7 +15,7 @@ APIGatewayURL = client.get_secret_value(SecretId="APIGatewayURL")["SecretString"
 # Code to get RDS info of new instance
 client = boto3.client('rds', region_name="us-east-1", aws_access_key_id=aws_access_key_id,
     aws_secret_access_key=aws_secret_access_key)
-time.sleep(4)
+time.sleep(4*60)
 response = client.describe_db_instances()
 for db_instance in response['DBInstances']:
     db_instance_name = db_instance['DBInstanceIdentifier']
@@ -63,6 +63,8 @@ def create_db():
 
     cursor.execute(query)
     connection.commit()
+
+create_db()
 
 parameter_json = {
     "APIGateway" : {
