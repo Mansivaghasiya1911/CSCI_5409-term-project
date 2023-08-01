@@ -8,7 +8,7 @@ client = boto3.client('secretsmanager', region_name="us-east-1", aws_access_key_
 APIGatewayURL = client.get_secret_value(SecretId="APIGatewayURL")["SecretString"]
 
 # Code to get RDS info of new instance
-client = boto3.client('rds')
+client = boto3.client('rds', region_name="us-east-1")
 response = client.describe_db_instances()
 for db_instance in response['DBInstances']:
     db_instance_name = db_instance['DBInstanceIdentifier']
