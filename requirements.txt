@@ -1,5 +1,4 @@
 boto3==1.28.10
-Pillow==10.0.0
 PyMySQL==1.1.0
 Flask==2.3.2
 requests==2.31.0
