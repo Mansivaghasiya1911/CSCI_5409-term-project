@@ -2,7 +2,9 @@ import boto3
 import pymysql
 import json
 # Code to get API Gateway
-client = boto3.client('secretsmanager', region_name="us-east-1")
+
+client = boto3.client('secretsmanager', region_name="us-east-1", aws_access_key_id="AKIAY6JUIRL5VH35BTIW",
+    aws_secret_access_key="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")
 APIGatewayURL = client.get_secret_value(SecretId="APIGatewayURL")["SecretString"]
 
 # Code to get RDS info of new instance
