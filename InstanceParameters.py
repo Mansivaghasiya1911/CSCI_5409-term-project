@@ -63,7 +63,10 @@ def create_db():
     cursor.execute(query)
     connection.commit()
 
-create_db()
+try:
+    create_db()
+except Exception as e:
+    print("crete db ")
 
 parameter_json = {
     "APIGateway" : {
