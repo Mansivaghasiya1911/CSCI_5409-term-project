@@ -16,16 +16,15 @@ APIGatewayURL = client.get_secret_value(SecretId="APIGatewayURL")["SecretString"
 client = boto3.client('rds', region_name="us-east-1", aws_access_key_id=aws_access_key_id,
     aws_secret_access_key=aws_secret_access_key)
 response = client.describe_db_instances()
-
 for db_instance in response['DBInstances']:
     db_instance_name = db_instance['DBInstanceIdentifier']
     print(db_instance_name)
     if db_instance_name == "userdatadb":
         print(db_instance)
-HOSTNAME = ""
-PORT = "3306"
-USER = "admin"
-PASSWORD = "password"
+        HOSTNAME = db_instance["Endpoint"]["Address"]
+        PORT = db_instance["Endpoint"]["Port"]
+        USER = "admin"
+        PASSWORD = "password"
 
 client = boto3.client('sns', region_name='us-east-1', aws_access_key_id=aws_access_key_id,
     aws_secret_access_key=aws_secret_access_key)
@@ -63,10 +62,7 @@ def create_db():
     cursor.execute(query)
     connection.commit()
 
-try:
-    create_db()
-except Exception as e:
-    print("crete db ")
+create_db()
 
 parameter_json = {
     "APIGateway" : {

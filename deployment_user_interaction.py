@@ -129,23 +129,23 @@ def store_data_to_rds(activity_uuid, user_name, caption_image, bucket_name, file
         # Create a cursor object
         cursor = connection.cursor()
 
-        query = f"""INSERT INTO `user-activity-information`.`activity_data`
-                        (`activity_uuid`,
-                        `user_name`,
-                        `bucket_name`,
-                        `file_ name`,
-                        `user_text`,
-                        `sentiment`,
-                        `user_text_info`)
-                        VALUES
-                        ({activity_uuid},
-                        {user_name},
-                        {bucket_name},
-                        {file_at_bucket},
-                        {caption_image},
-                        {sentiment},
-                        '{uniques_entity_extracted}');
-                        """
+        query = f"""INSERT INTO `user_activity_information`.`activity_data`
+                                (`activity_id`,
+                                `user_name`,
+                                `bucket_name`,
+                                `file_ name`,
+                                `user_text`,
+                                `sentiment`,
+                                `user_text_info`)
+                                VALUES
+                                ("{activity_uuid}",
+                                "{user_name}",
+                                "{bucket_name}",
+                                "{file_at_bucket}",
+                                "{caption_image}",
+                                "{sentiment}",
+                                "{uniques_entity_extracted}");
+                                """
 
         cursor.execute(query)
         connection.commit()
@@ -153,7 +153,7 @@ def store_data_to_rds(activity_uuid, user_name, caption_image, bucket_name, file
         # Close the cursor and connection
         cursor.close()
         connection.close()
-
+        print("data entry done")
         response = {
             "status": 200,
             "data": {
@@ -163,7 +163,7 @@ def store_data_to_rds(activity_uuid, user_name, caption_image, bucket_name, file
         }
 
     except Exception as e:
-
+        print("error in db  : "+str(e))
         response = {
             "Status": 400,
             "message": "Error occured : " + str(e)
