@@ -44,11 +44,11 @@ def create_db():
 
     # Create a cursor object
     cursor = connection.cursor()
-    create_db_query = "CREATE DATABASE user-activity-information;"
+    create_db_query = "CREATE DATABASE user_activity_information;"
     cursor.execute(create_db_query)
     connection.commit()
 
-    query = f"""CREATE TABLE `user-activity-information`.`activity_data` (
+    query = f"""CREATE TABLE `user_activity_information`.`activity_data` (
 						  `activity_id` INT NOT NULL AUTO_INCREMENT,
 						  `user_name` VARCHAR(45) NOT NULL,
 						  `bucket_name` VARCHAR(45) NULL,
